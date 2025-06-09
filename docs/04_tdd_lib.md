@@ -151,7 +151,7 @@ Advantages of pytest
 * Pytest is free and open source.
 * Because of its simple syntax, pytest is very easy to start with.
 
-## Anatomy of a test
+## Anatomy of an automated test
 
 In the simplest terms, a test is meant to look at the result of a particular behavior, and make sure that result aligns with what you would expect. Behavior is not something that can be empirically measured, which is why writing tests can be challenging.
 “Behavior” is the way in which some system acts in response to a particular situation and/or stimuli. But exactly how or why something is done is not quite as important as what was done.
