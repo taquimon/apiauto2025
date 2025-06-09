@@ -22,7 +22,7 @@ set token=xxxxxxxxxxxxxxxxxxx
 ```
 ### GET
 
-GET the **projects** 
+GET the **projects**
 
 Default call from page
 ```shell
@@ -55,30 +55,30 @@ Create a project
 ```shell
 curl "https://api.todoist.com/rest/v2/projects" -X POST \
     --data '{ "name": "Shopping List" }' \
-    -H "Content-Type: application/json" \    
+    -H "Content-Type: application/json" \
     -H "Authorization: Bearer $token"
 ```
 create project using file
 ```shell
 curl "https://api.todoist.com/rest/v2/projects" -X POST \
-    --data @data.json \ 
-    -H "Content-Type: application/json"  
+    --data @data.json \
+    -H "Content-Type: application/json"
     -H "Authorization: Bearer $token"
 ```
 > content of data.json file
- 
+
 ```json
 {
   "name": "Shopping List"
 }
 ```
 ### UPDATE
-Update project 
+Update project
 ```shell
 curl "https://api.todoist.com/rest/v2/projects/$id_project" \
     -X POST \
     --data '{ "name": "Things To Buy" }' \
-    -H "Content-Type: application/json" \    
+    -H "Content-Type: application/json" \
     -H "Authorization: Bearer $token"
 ```
 ** Try using PUT and PATCH
@@ -106,22 +106,23 @@ https://insomnia.rest
 
 ## Task:
 > Create CURL request using an API:
-> 
+>
 > Basic CRUD(Read, Create, Update, Delete):
-> 
+>
 > Negative cases at least 4:
-> 
+>
 > Save in curl folder in your repository:
-> 
+>
+Example
 <pre>
- ├── api_automation_2024
+ ├── api_automation_2025
  │  ├── docs
  │  ├── curl --> upload your request here
 </pre>
 
 ## References:
 
-> curl: https://curl.se 
+> curl: https://curl.se
 
 > curl download: https://curl.se/download.html
 
