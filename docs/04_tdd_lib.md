@@ -169,7 +169,56 @@ At its core, the test is ultimately the act and assert steps, with the arrange s
 
 “Fixtures”, in the literal sense, are each of the arrange steps and data. They’re everything that test needs to do its thing.
 
+### unittests fixtures
+```python
+        @classmethod
+        def setup_class(cls):
 
+        def setup_method(self):
+
+        def test_one(self):
+
+        def test_two(self):
+
+        def test_three(self):
+
+        def teardown_method(self):
+
+        @classmethod
+        def teardown_class(cls):
+```
+
+### pytest fixtures
+Example
+```python
+# Arrange
+@pytest.fixture
+def first_entry():
+    return "a"
+
+# Arrange
+@pytest.fixture
+def order(first_entry):
+    return first_entry
+```
+
+### Levels of fixture scopes
+* **Function** (Set up and tear down once for each test function) (default)
+* **Class** (Set up and tear down once for each test class)
+* **Module** (Set up and tear down once for each test module/file)/
+* **Session** (Set up and tear down once for each test session i.e comprising one or more test files)
+
+
+### addoption
+The pytest adoption feature extends the flexibility of command-line arguments in pytest by dynamically passing them to unit tests. This feature allows you to define custom command line arguments for tests.
+
+Example
+```python
+def pytest_addoption(parser):
+    parser.addoption(
+        '--env', action='store', default='dev', help="Environment where the tests are executed"
+    )
+```
 ## References
 
 > pylint vs flake8: https://www.saashub.com/compare-pylint-vs-flake8, https://www.slant.co/versus/12630/12632/~pylint_vs_flake8

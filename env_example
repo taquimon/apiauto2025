@@ -1,0 +1,2 @@
+TOKEN_TODO=token_of_todo_api
+URL_BASE=https://api.todoist.com/api/v1/
