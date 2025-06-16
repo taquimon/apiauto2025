@@ -1,8 +1,12 @@
 import json
 import logging
+
+import jsonschema
 import requests
 
 from config.config import url_base, headers
+from helper.rest_client import RestClient
+from helper.validate_response import ValidateResponse
 from utils.logger import get_logger
 
 LOGGER = get_logger(__name__, logging.DEBUG)
@@ -17,6 +21,8 @@ class TestProject:
         """
         # Arrange
         cls.project_list = []
+        cls.rest_client = RestClient()
+        cls.validate = ValidateResponse()
 
     def test_create_project(self, test_log_name):
         """
@@ -86,11 +92,45 @@ class TestProject:
         """
         url_delete_project = f"{url_base}projects/{create_project}"
         LOGGER.debug(f"URL delete project: {url_delete_project}")
-        response = requests.delete(url=url_delete_project, headers=headers)
-        # LOGGER.debug("Response: %s", response.json())
-        LOGGER.debug("Status Code: %s", str(response.status_code))
+        response = self.rest_client.send_request(
+            "DELETE", url=url_delete_project, headers=headers
+        )
+
         # assertion
-        assert response.status_code == 204
+        self.validate.validate_response(response, "delete_project")
+
+    def test_create_project_without_body_negative(self, test_log_name):
+        """
+        Test for create project without body
+        :param test_log_name:
+        """
+        # act
+        response = self.rest_client.send_request(
+            "POST", url=f"{url_base}projects", headers=headers
+        )
+        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        schema = {
+            "type": "object",
+            "properties": {
+                "error": {"type": "string"},
+                "error_code": {"type": "string"},
+                # "error_extra": {
+                #     "argument": "name",
+                #     "event_id": "4922dfd97a03480fab20fc9ceb5bebfb",
+                #     "retry_after": 3
+                # },
+                # "error_tag": "ARGUMENT_MISSING",
+                # "http_code": 400
+            },
+        }
+        try:
+            jsonschema.validate(instance=response["body"], schema=schema)
+            LOGGER.debug("Schema is valid")
+        except jsonschema.exceptions.ValidationError as e:
+            LOGGER.debug("JSON validator error: %s", e)
+        # assertion
+        self.validate.validate_response(response, "create_project_without_body")
 
     @classmethod
     def teardown_class(cls):
