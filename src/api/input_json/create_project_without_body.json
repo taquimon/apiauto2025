@@ -1,14 +1,20 @@
 {
   "body": {
-    "error": "Required argument is missing",
-        "error_code": 19,
-        "error_extra": {
-            "argument": "name",
-            "event_id": "4922dfd97a03480fab20fc9ceb5bebfb",
-            "retry_after": 3
-        },
-        "error_tag": "ARGUMENT_MISSING",
-        "http_code": 400
+    "type": "object",
+            "properties": {
+                "error": {"type": "string"},
+                "error_code": {"type": "number"},
+                "error_extra": {
+                    "type": "object",
+                    "properties": {
+                        "argument": { "type": "string"},
+                        "event_id": {"type": "string"},
+                        "retry_after": { "type":"number"}
+                    }
+                },
+                "error_tag": { "type":"string"},
+                "http_code": { "type": "number"}
+            }
   },
   "status_code": 400,
   "headers": {

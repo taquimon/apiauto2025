@@ -1,8 +1,9 @@
 import json
 import logging
 
-import jsonschema
+import pytest
 import requests
+from faker import Faker
 
 from config.config import url_base, headers
 from helper.rest_client import RestClient
@@ -23,7 +24,10 @@ class TestProject:
         cls.project_list = []
         cls.rest_client = RestClient()
         cls.validate = ValidateResponse()
+        cls.faker = Faker()
 
+    @pytest.mark.acceptance
+    @pytest.mark.smoke
     def test_create_project(self, test_log_name):
         """
         Test for create a project
@@ -31,7 +35,7 @@ class TestProject:
         """
         # body
         project_body = {
-            "name": "Test Project from test",
+            "name": f"Project {self.faker.company()}",
         }
         # call endpoint using requests
         response = requests.post(
@@ -43,6 +47,7 @@ class TestProject:
         # assertion
         assert response.status_code == 200
 
+    @pytest.mark.acceptance
     def test_get_project(self, create_project, test_log_name):
         """
         Test for get a project
@@ -60,6 +65,7 @@ class TestProject:
         # assertion
         assert response.status_code == 200
 
+    @pytest.mark.acceptance
     def test_update_project(self, create_project, test_log_name):
         """
         Test for update a project
@@ -84,6 +90,7 @@ class TestProject:
         # assertion
         assert response.status_code == 200
 
+    @pytest.mark.acceptance
     def test_delete_project(self, create_project, test_log_name):
         """
         Test for delete a project
@@ -99,6 +106,7 @@ class TestProject:
         # assertion
         self.validate.validate_response(response, "delete_project")
 
+    @pytest.mark.functional
     def test_create_project_without_body_negative(self, test_log_name):
         """
         Test for create project without body
@@ -110,25 +118,7 @@ class TestProject:
         )
         LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
         LOGGER.debug("Status Code: %s", str(response["status_code"]))
-        schema = {
-            "type": "object",
-            "properties": {
-                "error": {"type": "string"},
-                "error_code": {"type": "string"},
-                # "error_extra": {
-                #     "argument": "name",
-                #     "event_id": "4922dfd97a03480fab20fc9ceb5bebfb",
-                #     "retry_after": 3
-                # },
-                # "error_tag": "ARGUMENT_MISSING",
-                # "http_code": 400
-            },
-        }
-        try:
-            jsonschema.validate(instance=response["body"], schema=schema)
-            LOGGER.debug("Schema is valid")
-        except jsonschema.exceptions.ValidationError as e:
-            LOGGER.debug("JSON validator error: %s", e)
+
         # assertion
         self.validate.validate_response(response, "create_project_without_body")
 
