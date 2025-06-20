@@ -43,6 +43,20 @@ After that you can run your tests with command:
  python -m pytest todo_api/sections/test_sections.py -v -s -m smoke
 ```
 
+Group test in a file (pytest version 8.2)
+
+create a file
+Example (suite.txt)
+```text
+src/api/projects/test_projects.py::TestProject::test_create_project
+src/api/projects/test_projects.py::TestProject::test_get_project
+```
+Execute the file
+
+```python
+  python -m pytest @suite.txt
+```
+
 ## Reports
 
 ### junitxml
@@ -59,7 +73,7 @@ then execute command
 > Install package pytest-html
 
 ```shell
-pip install pytest-html
+ pip install pytest-html
 ```
 
 then execute command
@@ -72,7 +86,7 @@ then execute command
 ### excel
 > Install package pytest-excel
 ```shell
-pip install pytest-excel
+ pip install pytest-excel
 ```
 
 then execute command
@@ -84,7 +98,7 @@ then execute command
 ### markdown
 > Install package pytest-md-report
 ```shell
-pip install pytest-md-report
+ pip install pytest-md-report
 ```
 
 then execute command
@@ -97,7 +111,7 @@ then execute command
 > Install package allure-pytest
 
 ```shell
-pip install allure-pytest
+ pip install allure-pytest
 ```
 
 > then execute command
@@ -106,10 +120,29 @@ pip install allure-pytest
  python -m pytest todo_api/sections/test_sections.py -v -s --alluredir allure-results
 
 ```
-> Once reports is generated you can see with command:
+> Once reports are generated, you can see with command:
 
 ```shell
-allure serve allure_results
+ allure serve allure_results
+```
+Allure Decorators
+```python
+@allure.title("Test Authentication")
+@allure.description("This test attempts to log into the website using a login and a password. Fails if any error happens.\n\nNote that this test does not test 2-Factor Authentication.")
+@allure.tag("NewUI", "Essentials", "Authentication")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.label("owner", "John Doe")
+@allure.link("https://dev.example.com/", name="Website")
+@allure.issue("AUTH-123")
+@allure.testcase("TMS-456")
+```
+Organize Tests
+
+```python
+@allure.epic("Web interface")
+@allure.feature("Essential features")
+@allure.story("Authentication")
+def test_authentication():
 ```
 
 ### Send Automated results by teams

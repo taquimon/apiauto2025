@@ -1,6 +1,7 @@
 import json
 import logging
 
+import allure
 import pytest
 import requests
 from faker import Faker
@@ -28,6 +29,9 @@ class TestProject:
 
     @pytest.mark.acceptance
     @pytest.mark.smoke
+    @allure.title("Test Create Project")
+    @allure.tag("acceptance", "smoke")
+    @allure.label("owner", "Edwin Taquichiri")
     def test_create_project(self, test_log_name):
         """
         Test for create a project
@@ -48,6 +52,9 @@ class TestProject:
         assert response.status_code == 200
 
     @pytest.mark.acceptance
+    @allure.title("Test Get Project")
+    @allure.tag("acceptance")
+    @allure.label("owner", "Edwin Taquichiri")
     def test_get_project(self, create_project, test_log_name):
         """
         Test for get a project
@@ -66,6 +73,9 @@ class TestProject:
         assert response.status_code == 200
 
     @pytest.mark.acceptance
+    @allure.title("Test Update Project")
+    @allure.tag("acceptance")
+    @allure.label("owner", "Edwin Taquichiri")
     def test_update_project(self, create_project, test_log_name):
         """
         Test for update a project
@@ -91,6 +101,9 @@ class TestProject:
         assert response.status_code == 200
 
     @pytest.mark.acceptance
+    @allure.title("Test Delete Project")
+    @allure.tag("acceptance")
+    @allure.label("owner", "Edwin Taquichiri")
     def test_delete_project(self, create_project, test_log_name):
         """
         Test for delete a project
@@ -107,6 +120,9 @@ class TestProject:
         self.validate.validate_response(response, "delete_project")
 
     @pytest.mark.functional
+    @allure.title("Test validate error message when try to create project without name")
+    @allure.tag("functional", "negative")
+    @allure.label("owner", "Edwin Taquichiri")
     def test_create_project_without_body_negative(self, test_log_name):
         """
         Test for create project without body
@@ -121,6 +137,34 @@ class TestProject:
 
         # assertion
         self.validate.validate_response(response, "create_project_without_body")
+
+    @pytest.mark.functional
+    @allure.title("Test validate to create project wit different inputs")
+    @allure.tag("functional")
+    @allure.label("owner", "Edwin Taquichiri")
+    @pytest.mark.parametrize(
+        "name_project_test", ["12312323", "!@@#$$$%", "<script>alert('test');</script>"]
+    )
+    def test_create_project_using_different_name_data(
+        self, test_log_name, name_project_test
+    ):
+        """
+        Test for create a project using different inputs in project name
+        :param test_log_name:  log the test name
+        """
+        # body
+        project_body = {
+            "name": f"{name_project_test}",
+        }
+        # call endpoint using requests
+        response = requests.post(
+            url=f"{url_base}projects", headers=headers, json=project_body
+        )
+        LOGGER.debug("Response: %s", json.dumps(response.json(), indent=4))
+        LOGGER.debug("Status Code: %s", str(response.status_code))
+        self.project_list.append(response.json()["id"])
+        # assertion
+        assert response.status_code == 200
 
     @classmethod
     def teardown_class(cls):

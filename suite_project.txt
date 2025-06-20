@@ -1,0 +1,2 @@
+src/api/projects/test_projects.py::TestProject::test_create_project
+src/api/projects/test_projects.py::TestProject::test_get_project
