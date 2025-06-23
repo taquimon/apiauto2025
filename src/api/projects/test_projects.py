@@ -14,6 +14,8 @@ from utils.logger import get_logger
 LOGGER = get_logger(__name__, logging.DEBUG)
 
 
+@allure.story("Projects")
+@allure.parent_suite("Project")
 class TestProject:
     @classmethod
     def setup_class(cls):
@@ -42,14 +44,15 @@ class TestProject:
             "name": f"Project {self.faker.company()}",
         }
         # call endpoint using requests
-        response = requests.post(
-            url=f"{url_base}projects", headers=headers, json=project_body
+        response = self.rest_client.send_request(
+            "POST", url=f"{url_base}projects", headers=headers, body=project_body
         )
-        LOGGER.debug("Response: %s", json.dumps(response.json(), indent=4))
-        LOGGER.debug("Status Code: %s", str(response.status_code))
-        self.project_list.append(response.json()["id"])
+
+        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        self.project_list.append(response["body"]["id"])
         # assertion
-        assert response.status_code == 200
+        assert response["status_code"] == 200
 
     @pytest.mark.acceptance
     @allure.title("Test Get Project")
@@ -66,11 +69,13 @@ class TestProject:
         LOGGER.debug(f"URL get project: {url_get_project}")
 
         # call GET endpoint (act)
-        response = requests.get(url=url_get_project, headers=headers)
-        LOGGER.debug("Response: %s", json.dumps(response.json(), indent=4))
-        LOGGER.debug("Status Code: %s", str(response.status_code))
+        response = self.rest_client.send_request(
+            "GET", url=url_get_project, headers=headers
+        )
+        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(response["status_code"]))
         # assertion
-        assert response.status_code == 200
+        assert response["status_code"] == 200
 
     @pytest.mark.acceptance
     @allure.title("Test Update Project")
@@ -157,14 +162,15 @@ class TestProject:
             "name": f"{name_project_test}",
         }
         # call endpoint using requests
-        response = requests.post(
-            url=f"{url_base}projects", headers=headers, json=project_body
+        response = self.rest_client.send_request(
+            "POST", url=f"{url_base}projects", headers=headers, body=project_body
         )
-        LOGGER.debug("Response: %s", json.dumps(response.json(), indent=4))
-        LOGGER.debug("Status Code: %s", str(response.status_code))
-        self.project_list.append(response.json()["id"])
+        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+
+        self.project_list.append(response["body"]["id"])
         # assertion
-        assert response.status_code == 200
+        assert response["status_code"] == 200
 
     @classmethod
     def teardown_class(cls):

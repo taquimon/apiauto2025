@@ -53,6 +53,34 @@ def delete_project(project_id):
         LOGGER.debug("Project deleted")
 
 
+@pytest.fixture()
+def create_section(create_project):
+    LOGGER.debug("Create section fixture")
+
+    body_section = {"project_id": f"{create_project}", "name": "Section from fixture"}
+    url_section = f"{url_base}sections"
+    response = requests.post(url_section, json=body_section, headers=headers)
+    LOGGER.debug("Response Section: %s", str(response.json()))
+    section_id = response.json()["id"]
+    yield section_id
+
+
+@pytest.fixture()
+def create_task():
+    LOGGER.debug("Create task fixture")
+
+    task_body = {
+        "content": "Task without project and section ids",
+        "description": "Task created for testing purposes",
+        "labels": ["API", "Automation", "Test"],
+    }
+    url_task = f"{url_base}tasks"
+    response = requests.post(url_task, json=task_body, headers=headers)
+    LOGGER.debug("Response Section: %s", str(response.json()))
+    task_id = response.json()["id"]
+    yield task_id
+
+
 def pytest_addoption(parser):
     parser.addoption(
         "--env",

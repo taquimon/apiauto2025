@@ -152,6 +152,20 @@ You need to install package pymsteams
 pip install pymsteams
 ```
 
+## Task
+
+- Create 10 TEST for:
+
+  * 4 CRUD
+  * 5 FUNCTIONAL
+  * 1 E2E
+
+- Validate the response using validator
+
+- Generate Reports
+  * HTML (pytest-html or allure)
+  * MD report and send by Teams chat
+
 ## References
 
 > Pytest junitxml: https://www.browserstack.com/docs/test-management/upload-reports-cli/frameworks/pytest

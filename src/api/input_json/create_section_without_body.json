@@ -1,0 +1,37 @@
+{
+  "body": {
+    "type": "object",
+            "properties": {
+                "error": {"type": "string"},
+                "error_code": {"type": "number"},
+                "error_extra": {
+                    "type": "object",
+                    "properties": {
+                        "argument": { "type": "string"},
+                        "event_id": {"type": "string"},
+                        "retry_after": { "type":"number"}
+                    }
+                },
+                "error_tag": { "type":"string"},
+                "http_code": { "type": "number"}
+            }
+  },
+  "status_code": 400,
+  "headers": {
+    "Content-Type": "application/json",
+    "Content-Length": "199",
+    "Connection": "keep-alive",
+    "Date": "Mon, 16 Jun 2025 22:16:22 GMT",
+    "Vary": "",
+    "Cache-Control": "",
+    "Referrer-Policy": "",
+    "Retry-After": "",
+    "Server": "",
+    "Set-Cookie": "",
+    "Strict-Transport-Security": "",
+    "X-Cache": "",
+    "Via": "",
+    "X-Amz-Cf-Pop": "",
+    "X-Amz-Cf-Id": ""
+  }
+}
