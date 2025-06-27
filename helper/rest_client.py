@@ -9,7 +9,7 @@ class RestClient:
     def __init__(self):
         self.session = requests.Session()
 
-    def send_request(self, method_name, url, headers, body=None):
+    def send_request(self, method_name, url, headers, body=None, data=None):
         response_updated = {}
         methods = {
             "GET": self.session.get,
@@ -20,7 +20,9 @@ class RestClient:
         try:
             # response = requests.post(url=f"{url_base}projects", headers=headers, json=project_body)
 
-            response = methods[method_name](url=url, headers=headers, json=body)
+            response = methods[method_name](
+                url=url, headers=headers, json=body, data=data
+            )
             response.raise_for_status()
             response_updated["body"] = (
                 response.json() if response.text else {"message": "No body content"}
