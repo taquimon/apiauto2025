@@ -37,3 +37,6 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest src/api -vs
+      env:
+        TOKEN_TODO: ${{ secrets.TOKEN_TODO }}
+        URL_BASE: ${{ secrets.URL_BASE }}
