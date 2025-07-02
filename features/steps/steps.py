@@ -44,7 +44,6 @@ def call_endpoints_with_json(context, method, action, endpoint_name):
     # add to list of projects for clean up
     if action == "create":
         append_to_feature_list(endpoint_name, context, response["body"]["id"])
-        # context.project_list.append(response["body"]["id"])
     LOGGER.debug(response)
     # store status code in context
     context.status_code = response["status_code"]
