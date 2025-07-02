@@ -78,6 +78,28 @@ class TestProject:
         assert response["status_code"] == 200
 
     @pytest.mark.acceptance
+    @allure.title("Test Get All Projects")
+    @allure.tag("acceptance")
+    @allure.label("owner", "Edwin Taquichiri")
+    def test_all_projects(self, test_log_name):
+        """
+        Test for get all projects
+        :param test_log_name:    (str) log the test name
+        """
+        # url for get the project
+        url_get_projects = f"{url_base}projects"
+        LOGGER.debug(f"URL get project: {url_get_projects}")
+
+        # call GET endpoint (act)
+        response = self.rest_client.send_request(
+            "GET", url=url_get_projects, headers=headers
+        )
+        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        # assertion
+        self.validate.validate_response(response, "get_all_projects")
+
+    @pytest.mark.acceptance
     @allure.title("Test Update Project")
     @allure.tag("acceptance")
     @allure.label("owner", "Edwin Taquichiri")

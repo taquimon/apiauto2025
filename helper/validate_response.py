@@ -12,7 +12,19 @@ class ValidateResponse:
     def validate_response(self, actual_response, file_name):
         expected_response = self.read_input_data(f"src/api/input_json/{file_name}.json")
 
-        self.validate_value(actual_response["body"], expected_response["body"], "body")
+        if "results" in actual_response["body"]:
+            if isinstance(
+                actual_response["body"]["results"], list
+            ):  # when body is a list
+                self.validate_value(
+                    actual_response["body"]["results"][0],
+                    expected_response["body"]["results"][0],
+                    "body",
+                )
+        else:
+            self.validate_value(
+                actual_response["body"], expected_response["body"], "body"
+            )
         self.validate_value(
             actual_response["status_code"],
             expected_response["status_code"],

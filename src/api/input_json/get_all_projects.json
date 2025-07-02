@@ -1,0 +1,181 @@
+{
+  "body": {
+    "results": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "can_assign_tasks": {
+            "type": "boolean"
+          },
+          "child_order": {
+            "type": "integer"
+          },
+          "color": {
+            "type": "string"
+          },
+          "creator_uid": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "is_archived": {
+            "type": "boolean"
+          },
+          "is_deleted": {
+            "type": "boolean"
+          },
+          "is_favorite": {
+            "type": "boolean"
+          },
+          "is_frozen": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "view_style": {
+            "type": "string"
+          },
+          "default_order": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "public_access": {
+            "type": "boolean"
+          },
+          "public_key": {
+            "type": "string"
+          },
+          "access": {
+            "type": "object",
+            "properties": {
+              "visibility": {
+                "type": "string"
+              },
+              "configuration": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "visibility",
+              "configuration"
+            ]
+          },
+          "role": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "null"
+          },
+          "inbox_project": {
+            "type": "boolean"
+          },
+          "is_collapsed": {
+            "type": "boolean"
+          },
+          "is_shared": {
+            "type": "boolean"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "can_assign_tasks": {
+            "type": "boolean"
+          },
+          "child_order": {
+            "type": "integer"
+          },
+          "color": {
+            "type": "string"
+          },
+          "creator_uid": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "is_archived": {
+            "type": "boolean"
+          },
+          "is_deleted": {
+            "type": "boolean"
+          },
+          "is_favorite": {
+            "type": "boolean"
+          },
+          "is_frozen": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "view_style": {
+            "type": "string"
+          },
+          "default_order": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "public_access": {
+            "type": "boolean"
+          },
+          "public_key": {
+            "type": "string"
+          },
+          "access": {
+            "type": "object",
+            "properties": {
+              "visibility": {
+                "type": "string"
+              },
+              "configuration": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "visibility",
+              "configuration"
+            ]
+          },
+          "role": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "null"
+          },
+          "inbox_project": {
+            "type": "boolean"
+          },
+          "is_collapsed": {
+            "type": "boolean"
+          },
+          "is_shared": {
+            "type": "boolean"
+          }
+        }
+      }
+    ]
+  },
+  "status_code": 200,
+  "headers": {
+  }
+}

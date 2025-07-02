@@ -18,6 +18,7 @@ def before_all(context):
     context.url_base = url_base
     context.rest_client = RestClient()
     context.project_list = []
+    context.section_list = []
 
 
 def before_feature(context, feature):
@@ -36,6 +37,7 @@ def before_scenario(context, scenario):
     :param context:
     :param scenario:
     """
+    context.project_list = []
     LOGGER.debug('Starting scenario: "%s"', scenario.name)
 
     # create a project
@@ -55,6 +57,22 @@ def before_scenario(context, scenario):
         context.project_list.append(context.project_id)
         LOGGER.debug("Project ID: %s", response["body"]["id"])
 
+    if "section_id" in scenario.tags:
+        section_body = {
+            "project_id": f"{context.project_id}",
+            "name": "Section name",
+        }
+        LOGGER.debug("create section")
+        response = context.rest_client.send_request(
+            "POST",
+            url=f"{context.url_base}sections",
+            headers=context.headers,
+            body=section_body,
+        )
+        context.section_id = response["body"]["id"]
+        context.section_list.append(context.section_id)
+        LOGGER.debug("Section ID: %s", response["body"]["id"])
+
 
 def after_scenario(context, scenario):
     """
@@ -64,6 +82,13 @@ def after_scenario(context, scenario):
     :return:
     """
     LOGGER.debug('Ending scenario: "%s"', scenario.name)
+    for project_id in context.project_list:
+        url_delete_project = f"{context.url_base}projects/{project_id}"
+        response = context.rest_client.send_request(
+            "DELETE", url=url_delete_project, headers=context.headers
+        )
+        if response["status_code"] == 204:
+            LOGGER.debug("Project %s deleted", project_id)
 
 
 def after_feature(context, feature):
@@ -83,10 +108,3 @@ def after_all(context):
     :return:
     """
     LOGGER.debug("After all")
-    for project_id in context.project_list:
-        url_delete_project = f"{context.url_base}projects/{project_id}"
-        response = context.rest_client.send_request(
-            "DELETE", url=url_delete_project, headers=context.headers
-        )
-        if response["status_code"] == 204:
-            LOGGER.debug("Project %s deleted", project_id)
