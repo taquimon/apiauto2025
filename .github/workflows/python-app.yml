@@ -16,6 +16,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment:
+      name: .env
     env:
       TOKEN_TODO: ${{ secrets.TOKEN_TODO }}
       URL_BASE: ${{ vars.URL_BASE }}
