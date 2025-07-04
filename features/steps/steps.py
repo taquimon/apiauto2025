@@ -2,13 +2,15 @@ import json
 import logging
 
 from helper.rest_client import RestClient
+from helper.validate_response import ValidateResponse
 from utils.logger import get_logger
 
-from behave import when, then
+from behave import when, then, step
 
 LOGGER = get_logger(__name__, logging.DEBUG)
 
 rest_client = RestClient()
+validator = ValidateResponse()
 
 
 @when('user calls "{method}" method to "{action}" "{endpoint_name}" endpoint')
@@ -42,17 +44,24 @@ def call_endpoints_with_json(context, method, action, endpoint_name):
         method, url=url_create_feature, headers=context.headers, body=body_updated
     )
     # add to list of projects for clean up
-    if action == "create":
+    LOGGER.debug("Response %s", response)
+    if action == "create" and "id" in response["body"]:
         append_to_feature_list(endpoint_name, context, response["body"]["id"])
     LOGGER.debug(response)
     # store status code in context
     context.status_code = response["status_code"]
+    context.response = response
 
 
 @then("the status code is {status_code:d}")
 def verify_status_code(context, status_code):
     LOGGER.debug("Step verify status code %s", status_code)
     assert context.status_code == status_code
+
+
+@step('the response is validated with "{json_file}" file')
+def validate_json(context, json_file):
+    validator.validate_response(context.response, json_file)
 
 
 def get_feature_id(endpoint_name, context):
@@ -62,6 +71,8 @@ def get_feature_id(endpoint_name, context):
         feature_id = context.project_id
     elif endpoint_name == "sections":
         feature_id = context.section_id
+    elif endpoint_name == "tasks":
+        feature_id = context.task_id
     return feature_id
 
 

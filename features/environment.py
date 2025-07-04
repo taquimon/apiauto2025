@@ -73,6 +73,23 @@ def before_scenario(context, scenario):
         context.section_list.append(context.section_id)
         LOGGER.debug("Section ID: %s", response["body"]["id"])
 
+    if "task_id" in scenario.tags:
+        task_body = {
+            "content": "Task without project and section ids",
+            "description": "Task created for testing purposes",
+            "labels": ["API", "Automation", "Test"],
+        }
+        LOGGER.debug("create task")
+        response = context.rest_client.send_request(
+            "POST",
+            url=f"{context.url_base}tasks",
+            headers=context.headers,
+            body=task_body,
+        )
+        context.task_id = response["body"]["id"]
+        context.section_list.append(context.task_id)
+        LOGGER.debug("Task ID: %s", response["body"]["id"])
+
 
 def after_scenario(context, scenario):
     """

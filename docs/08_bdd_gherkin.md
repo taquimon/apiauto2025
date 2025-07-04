@@ -228,3 +228,5 @@ https://automationpanda.com/2019/04/02/python-bdd-framework-comparison/
 https://behave.readthedocs.io/en/latest/
 
 https://allurereport.org/docs/gettingstarted-readability/#description-links-and-other-metadata
+
+https://allurereport.org/docs/behave/

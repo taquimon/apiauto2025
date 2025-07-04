@@ -19,13 +19,13 @@ Feature: Suite for sections endpoint from TODOIST API
   """
   Then the status code is 200
 
-  @acceptance @project_id
+  @acceptance @project_id @section_id
   Scenario: Scenario to delete a Section
     When user calls "DELETE" method to "delete" "sections" endpoint
     Then the status code is 204
 
 
-  @acceptance @project_id @section_id @wip
+  @acceptance @project_id @section_id
   Scenario: Scenario to update a Section
   When user calls "POST" method to "update" "sections" endpoint using json
   """
