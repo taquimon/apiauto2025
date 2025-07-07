@@ -11,7 +11,7 @@ pipeline {
             steps {
                 withPythonEnv('python3') {
                     sh 'pip install -r requirements.txt'
-                    sh 'python3 -m pytest src/api -vs --alluredir reports/allure/allure-results'
+                    sh 'python3 -m pytest src/api -vs --alluredir reports/allure/allure-results --md-report --md-report-output reports/markdown/md_report.md'
                 }
             }
         }
@@ -26,6 +26,13 @@ pipeline {
                         results: [[path: 'reports/allure/allure-results']]
                     ])
                  }
+            }
+        }
+        stage('Send Report to Teams') {
+            steps {
+                withPythonEnv('python3') {
+                    sh 'python3 web_hook.py'
+                }
             }
         }
     }
