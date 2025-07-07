@@ -11,7 +11,7 @@ pipeline {
             steps {
                 withPythonEnv('python3') {
                     sh 'pip install -r requirements.txt'
-                    sh 'python3 -m pytest src/api -vs --alluredir reports/allure/allure-results --md-report --md-report-output reports/markdown/md_report.md'
+                    sh 'python3 -m pytest src/api -vs --alluredir reports/allure/allure-results --md-report --md-report-output md_report.md'
                 }
             }
         }
