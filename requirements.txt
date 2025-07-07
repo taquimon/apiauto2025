@@ -8,3 +8,4 @@ pytest-html==4.1.1
 behave==1.2.6
 allure-pytest==2.14.3
 pytest-md-report==0.7.0
+pymsteams
