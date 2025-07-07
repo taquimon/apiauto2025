@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        TOKEN_TODO = '9463fd6e63c3ac3e06372045795ef48264968d2c'
-        URL_BASE = 'https://api.todoist.com/api/v1/'
-    }
-
     stages {
         stage('python version') {
             steps {
@@ -16,7 +11,7 @@ pipeline {
             steps {
                 withPythonEnv('python3') {
                     sh 'pip install -r requirements.txt'
-                    sh 'python3 -m pytest src/api -vs'
+                    sh 'python3 -m pytest src/api -vs --alluredir reports/allure/allure-results'
                 }
             }
         }
@@ -28,7 +23,7 @@ pipeline {
                         jdk:'',
                         properties: [],
                         reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']]
+                        results: [[path: 'reports/allure/allure-results']]
                     ])
                  }
             }
