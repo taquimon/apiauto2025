@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/v1/labels"
+  },
+  "response": {
+    "jsonBody": {
+    "name": "string",
+    "order": -32768,
+    "color": {
+      "name": "charcoal",
+      "hex": "#808080",
+      "database_index": 47
+    },
+    "is_favorite": false
+  },
+    "headers": {
+      "Content-Type": "text/plain",
+      "Content-Length": "199",
+      "Connection": "keep-alive",
+      "Date": "Mon, 16 Jun 2025 22:16:22 GMT"
+    },
+    "status": 200
+  }
+}

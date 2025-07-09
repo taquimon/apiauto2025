@@ -9,7 +9,7 @@ class RestClient:
     def __init__(self):
         self.session = requests.Session()
 
-    def send_request(self, method_name, url, headers, body=None, data=None):
+    def send_request(self, method_name, url, headers=None, body=None, data=None):
         response_updated = {}
         methods = {
             "GET": self.session.get,
