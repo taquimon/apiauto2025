@@ -34,7 +34,5 @@ class TestLabel:
         response = self.rest_client.send_request("GET", url_get_labels)
         LOGGER.debug(f"response: {response}")
 
-        # LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        # LOGGER.debug("Status Code: %s", str(response["status_code"]))
         # assertion
         assert response["status_code"] == 200

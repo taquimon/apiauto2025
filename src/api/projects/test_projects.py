@@ -6,9 +6,11 @@ import pytest
 import requests
 from faker import Faker
 
+
 from config.config import url_base, headers
 from helper.rest_client import RestClient
 from helper.validate_response import ValidateResponse
+from utils.influxdb_connection import InfluxDBConnection
 from utils.logger import get_logger
 
 LOGGER = get_logger(__name__, logging.DEBUG)
@@ -28,6 +30,13 @@ class TestProject:
         cls.rest_client = RestClient()
         cls.validate = ValidateResponse()
         cls.faker = Faker()
+        cls.influxdb_client = InfluxDBConnection()
+
+    def setup_method(self):
+        self.response = None
+
+    def teardown_method(self):
+        self.influxdb_client.store_data_influxdb(self.response, "projects")
 
     @pytest.mark.acceptance
     @pytest.mark.smoke
@@ -44,15 +53,15 @@ class TestProject:
             "name": f"Project {self.faker.company()}",
         }
         # call endpoint using requests
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "POST", url=f"{url_base}projects", headers=headers, body=project_body
         )
 
-        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        LOGGER.debug("Status Code: %s", str(response["status_code"]))
-        self.project_list.append(response["body"]["id"])
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
+        self.project_list.append(self.response["body"]["id"])
         # assertion
-        assert response["status_code"] == 200
+        assert self.response["status_code"] == 200
 
     @pytest.mark.acceptance
     @allure.title("Test Get Project")
@@ -69,15 +78,16 @@ class TestProject:
         LOGGER.debug(f"URL get project: {url_get_project}")
 
         # call GET endpoint (act)
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "GET", url=url_get_project, headers=headers
         )
-        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
         # assertion
-        assert response["status_code"] == 200
+        assert self.response["status_code"] == 200
 
     @pytest.mark.acceptance
+    @pytest.mark.perfomance
     @allure.title("Test Get All Projects")
     @allure.tag("acceptance")
     @allure.label("owner", "Edwin Taquichiri")
@@ -91,13 +101,13 @@ class TestProject:
         LOGGER.debug(f"URL get project: {url_get_projects}")
 
         # call GET endpoint (act)
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "GET", url=url_get_projects, headers=headers
         )
-        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
         # assertion
-        self.validate.validate_response(response, "get_all_projects")
+        self.validate.validate_response(self.response, "get_all_projects")
 
     @pytest.mark.acceptance
     @allure.title("Test Update Project")
@@ -119,13 +129,13 @@ class TestProject:
         }
         LOGGER.debug(f"URL update project: {url_update_project}")
         # call POST endpoint
-        response = requests.post(
-            url=url_update_project, headers=headers, json=update_project_body
+        self.response = self.rest_client.send_request(
+            "POST", url=url_update_project, headers=headers, body=update_project_body
         )
-        LOGGER.debug("Response: %s", json.dumps(response.json(), indent=4))
-        LOGGER.debug("Status Code: %s", str(response.status_code))
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
         # assertion
-        assert response.status_code == 200
+        assert self.response["status_code"] == 200
 
     @pytest.mark.acceptance
     @allure.title("Test Delete Project")
@@ -139,12 +149,12 @@ class TestProject:
         """
         url_delete_project = f"{url_base}projects/{create_project}"
         LOGGER.debug(f"URL delete project: {url_delete_project}")
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "DELETE", url=url_delete_project, headers=headers
         )
 
         # assertion
-        self.validate.validate_response(response, "delete_project")
+        self.validate.validate_response(self.response, "delete_project")
 
     @pytest.mark.functional
     @allure.title("Test validate error message when try to create project without name")
@@ -156,14 +166,14 @@ class TestProject:
         :param test_log_name:
         """
         # act
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "POST", url=f"{url_base}projects", headers=headers
         )
-        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
 
         # assertion
-        self.validate.validate_response(response, "create_project_without_body")
+        self.validate.validate_response(self.response, "create_project_without_body")
 
     @pytest.mark.functional
     @allure.title("Test validate to create project wit different inputs")
@@ -184,15 +194,15 @@ class TestProject:
             "name": f"{name_project_test}",
         }
         # call endpoint using requests
-        response = self.rest_client.send_request(
+        self.response = self.rest_client.send_request(
             "POST", url=f"{url_base}projects", headers=headers, body=project_body
         )
-        LOGGER.debug("Response: %s", json.dumps(response["body"], indent=4))
-        LOGGER.debug("Status Code: %s", str(response["status_code"]))
+        LOGGER.debug("Response: %s", json.dumps(self.response["body"], indent=4))
+        LOGGER.debug("Status Code: %s", str(self.response["status_code"]))
 
-        self.project_list.append(response["body"]["id"])
+        self.project_list.append(self.response["body"]["id"])
         # assertion
-        assert response["status_code"] == 200
+        assert self.response["status_code"] == 200
 
     @classmethod
     def teardown_class(cls):
