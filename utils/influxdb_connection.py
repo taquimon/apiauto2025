@@ -8,11 +8,12 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from config.config import influxdb_token
 
 from utils.logger import get_logger
+from utils.singleton import Singleton
 
 LOGGER = get_logger(__name__, logging.DEBUG)
 
 
-class InfluxDBConnection:
+class InfluxDBConnection(metaclass=Singleton):
     def __init__(self):
         token = influxdb_token
         print(token)

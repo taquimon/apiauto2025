@@ -1,11 +1,12 @@
 import requests
 import logging
 from utils.logger import get_logger
+from utils.singleton import Singleton
 
 LOGGER = get_logger(__name__, logging.DEBUG)
 
 
-class RestClient:
+class RestClient(metaclass=Singleton):
     def __init__(self):
         self.session = requests.Session()
 

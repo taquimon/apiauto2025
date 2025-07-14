@@ -1,6 +1,7 @@
 import json
 import logging
 
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from helper.rest_client import RestClient
 from utils.logger import get_logger
@@ -32,7 +33,7 @@ class TestFastAPI:
             headers=headers_fast_api,
             data=fast_api_body,
         )
-        LOGGER.debug("Response %s", json.dumps(response, indent=4))
+        LOGGER.debug("Response %s", json.dumps(response["body"], indent=4))
         cls.token = response["body"]["access_token"]
 
         cls.headers = {
@@ -40,9 +41,13 @@ class TestFastAPI:
             "Authorization": f"Bearer {cls.token}",
         }
 
+    @retry(
+        stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
     def test_get_users(self):
         url_fast_api_users = f"{self.url_fast_api}users"
         response = self.rest_client.send_request(
             "GET", url=url_fast_api_users, headers=self.headers
         )
-        LOGGER.debug("Response %s", json.dumps(response, indent=4))
+        LOGGER.debug(response)
+        LOGGER.debug("Response %s", json.dumps(response["body"], indent=4))
